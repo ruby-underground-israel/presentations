@@ -10,6 +10,9 @@ show.add chapter title: "Basic Threads", subtitle: "Here Be Dragons"
 show.add text title: "Thread vs. Process", content: <<-CONTENT 
 # this is mostly a unix presentation
 * Resources
+	- Memory is shared inside a process
+	- Syncing between threads is easier 
+	# mutex, critical section, etc.
 * Control and Manage:
  - Externally (3rd party apps)
  - Restart
