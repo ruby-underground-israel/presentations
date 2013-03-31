@@ -2,9 +2,11 @@ count = 0
 
 100.times do |i|
    Thread.new {
-      count += 1
+   		1000.times do
+      	count += 1
+      end
    }
 end
 
-sleep(5)
+sleep(3)
 puts count

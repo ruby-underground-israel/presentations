@@ -9,10 +9,11 @@ show.add chapter title: "Basic Threads", subtitle: "Here Be Dragons"
 # we are presenting what threads are and some of the things around them
 show.add text title: "Thread vs. Process", content: <<-CONTENT 
 # this is mostly a unix presentation
-* Resources
-	- Memory is shared inside a process
+* Resources (Stack, Data, Code, Heap)
+  - Threads: Private stack. Process: Basically, none
+    - performance optimizations aside
+	- Memory and state is shared inside a process
 	- Syncing between threads is easier 
-	# mutex, critical section, etc.
 * Control and Manage:
  - Externally (3rd party apps)
  - Restart
@@ -34,22 +35,24 @@ count = 0
 
 100.times do |i|
    Thread.new {
-      count += 1
+      1000.times do
+        count += 1
+      end
    }
 end
 
-sleep(10)
+sleep(3)
 puts count
 SOURCE
 show.add code language: "Ruby", title: "No Race Conditions..", source: <<-SOURCE
 i = 0
 t1 = Thread.new do
-  1_000_000.times do
+  if i == 0 
     i += 1
   end
 end
 t2 = Thread.new do
-  1_000_000.times do
+  if i == 0
     i += 1
   end
 end
@@ -57,7 +60,7 @@ t1.join
 t2.join
 puts i
 SOURCE
-show.add code language: "Ruby", title: "No Race Conditions?", source: <<-SOURCE
+show.add code language: "Ruby", title: "Race Conditions", source: <<-SOURCE
 i = 0
 t1 = Thread.new do
 	if i == 0 
@@ -81,11 +84,21 @@ CONTENT
 show.add text title: "Threads evolve", content: <<-CONTENT
 * 1.8: Green Threads (http://en.wikipedia.org/wiki/Green_threads)
 * 1.9: - Real Threads (preemptive by OS)
-	- Fibers (yield controlled)
-		-- Fibonacci
-		-- enumerator implemented using fibers
+	 - Fibers (yield controlled)
+		  -- Fibonacci
+		  -- enumerator implemented using fibers
 CONTENT
-show.add code language: "Ruby", title: "Small fiber example", source: <<-SOURCE
+show.add code language: "Ruby", title: "Fibonacci fiber example", source: <<-SOURCE
+fib = Fiber.new do  
+   x, y = 0, 1 
+   loop do  
+    Fiber.yield y 
+    x,y = y,x+y 
+   end 
+  end 
+  20.times { puts fib.resume }
+SOURCE
+show.add code language: "Ruby", title: "Enumerator fiber example", source: <<-SOURCE
 # (c) Avdi Grim
 def names
   yield "Ylva"
@@ -112,6 +125,7 @@ enum = MyEnumerator.new(self, :names)
 enum.next                       # => "Ylva"
 enum.next                       # => "Brighid"
 SOURCE
+show.add chapter title: "Back To Threads"
 show.add code language: "Ruby", title: "Let's try", source: <<-SOURCE
 class Test
   ITERATIONS = 1000

@@ -13,7 +13,7 @@
 
     threads.each {|t| t.join } # also can be written: threads.each &:join
 
-    puts Time.now - start
+    puts "Run threads: #{Time.now - start}"
   end
 
 	def run_forks
@@ -26,7 +26,7 @@
     end
     Process.waitall
 
-    puts Time.now - start
+    puts "Run forks: #{Time.now - start}"
   end
 
   def run_normal
@@ -36,7 +36,7 @@
       do_iterations
     end
 
-    puts Time.now - start
+    puts "Run normal: #{Time.now - start}"
   end
 
   def do_iterations

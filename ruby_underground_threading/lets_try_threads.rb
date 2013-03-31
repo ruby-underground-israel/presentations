@@ -13,7 +13,7 @@ class Test
 
     threads.each {|t| t.join } # also can be written: threads.each &:join
 
-    puts Time.now - start
+    puts "Run threads: #{Time.now - start}"
   end
 
   def run_normal
@@ -23,7 +23,7 @@ class Test
       do_iterations
     end
 
-    puts Time.now - start
+    puts "Run without threads: #{Time.now - start}"
   end
 
   def do_iterations

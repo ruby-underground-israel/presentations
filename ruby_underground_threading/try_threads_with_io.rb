@@ -5,7 +5,7 @@ class Test
     start = Time.now
     threads = []
 
-    20.times do
+    10.times do
       threads << Thread.new do
         do_iterations
       end
@@ -13,21 +13,21 @@ class Test
 
     threads.each {|t| t.join } # also can be written: threads.each &:join
 
-    puts Time.now - start
+    puts "Run threads: #{Time.now - start}"
   end
 
   def run_normal
     start = Time.now
 
-    20.times do
+    10.times do
       do_iterations
     end
 
-    puts Time.now - start
+    puts "Run threads: #{Time.now - start}"
   end
 
   def do_iterations
-    sleep(10)
+    sleep(5)
   end
 end
 
